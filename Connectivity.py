@@ -7,7 +7,7 @@ import numpy.random as rn
 
 def Connectivity(p):
 
-    C = np.zeros((100,100))
+    C = np.zeros((1000,1000))
     
     # make 1000 random connections in each E-module
     for i in xrange(0, 800, 100):
