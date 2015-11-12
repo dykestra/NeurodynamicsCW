@@ -1,17 +1,9 @@
-"""
-Computational Neurodynamics
-Exercise 3
-(C) Murray Shanahan et al, 2015
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def PlotConnectivity(CIJ):
   """
-  Displays a ring network with connectivity matrix CIJ.
-  Assumes undirected edges (i.e. doesn't plot arrow heads).
   Inputs:
   CIJ  --  Graph connectivity matrix.
   """
@@ -42,6 +34,7 @@ def PlotConnectivity(CIJ):
     list_of_lines.append('b')
 
   # Plot nodes and edges
+  print "{0}".format(len(list_of_lines))
   plt.plot(*list_of_lines)
   plt.scatter(X_pos, Y_pos, s=80, c='r', marker='o', alpha=1)
   plt.axis('off')
