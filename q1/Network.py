@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 
 class IzNetwork:
 
-  def __init__(self):
-    self.p = 0
+  def __init__(self, _p, _runtime):
+    self.p = _p
     self.cm = Conn(self.p)
     
-    self.runtime = 1000
+    self.runtime = _runtime
     
     self.neurons = [IzNeuron(True, count) for count in xrange(800)]
     self.neurons = self.neurons + [IzNeuron(False, count) for count in xrange(800, 1000)]
@@ -73,35 +73,45 @@ class IzNetwork:
 
 class IzNeuron:
 
-  def __init__(self, isExcitatory, index):
+  def __init__(self, isExcitatory, _index):
 
     self.a = 0.02
     self.b = 0.2 if isExcitatory else 0.25
-    self.c = -65 + 10 * rn.rand() - 5
-    self.d = (8 if isExcitatory else 2) + rn.rand()
+    self.c = -65
+    self.d = 8 if isExcitatory else 2
 
     self.v = -65
     self.u = self.b * self.v
     
-    self.index = index
+    self.index = _index
 
     self.incomingFirings = []
 
-IN = IzNetwork()
-
-IN.run()
-
-firings = IN.firings
-
-xs = []
-ys = []
-N = len(firings) - 200
-
-for t in range(1000):
-  for idx in firings[t]:
-    xs.append(t)
-    ys.append(idx)
-
-plt.plot(xs, ys, "b.")
-plt.axis([0, 1000, 0, N])
-plt.savefig("Firing plot")
+for i in range(6):
+  # Rewiring probability
+  p = i / 10.0
+  
+  # Time in ms to simulate
+  runtime = 1000
+  
+  IN = IzNetwork(p, runtime)
+  
+  IN.run()
+  
+  firings = IN.firings
+  
+  xs = []
+  ys = []
+  N = len(firings) - 200
+  
+  for t in range(1000):
+    for idx in firings[t]:
+      xs.append(t)
+      ys.append(idx)
+  
+  plt.plot(xs, ys, "b.")
+  plt.axis([0, 1000, 0, N])
+  fig = plt.gcf()
+  fig.set_size_inches(8, 3)
+  fig.savefig("Firing plot for p={}%".format(int(p * 100)))
+  plt.clf()
