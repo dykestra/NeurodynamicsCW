@@ -1,4 +1,4 @@
-from PlotConnectivity import Lattice as PConn
+from PlotConnectivity import Lattice as Lattice
 from Connectivity import Connectivity as Conn
 
-PConn(Conn(0))
+Lattice(Conn(0))
