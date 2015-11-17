@@ -1,7 +1,7 @@
 from Connectivity import Connectivity as Conn
 import numpy as np
 import numpy.random as rn
-
+import matplotlib.pyplot as plt
 
 class IzNetwork:
 
@@ -58,7 +58,7 @@ class IzNetwork:
 
       if len(fired) > 0:
         for f in fired:
-          self.firings[t].append(f)
+          self.firings[t].append(f.index)
           
           for i in xrange(1000):
             if self.cm[f.index][i] != 0:
@@ -91,3 +91,18 @@ class IzNeuron:
 IN = IzNetwork()
 
 IN.run()
+
+firings = IN.firings
+
+xs = []
+ys = []
+N = len(firings) - 200
+
+for t in range(1000):
+  for idx in firings[t]:
+    xs.append(t)
+    ys.append(idx)
+
+plt.plot(xs, ys, "b.")
+plt.axis([0, 1000, 0, N])
+plt.savefig("Firing plot")
