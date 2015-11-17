@@ -53,7 +53,7 @@ class IzNetwork:
       # Find index of neurons that have fired this millisecond
       fired = []
       for neuron in self.neurons:
-        if neuron.v > 30:
+        if neuron.v >= 30:
           fired.append(neuron)
 
       if len(fired) > 0:
@@ -63,7 +63,6 @@ class IzNetwork:
           for i in xrange(1000):
             if self.cm[f.index][i] != 0:
               delay = rn.randint(1, 20) if ((f.index < 800) and (i < 800)) else 1
-              #print(i)
               self.neurons[i].incomingFirings.append([delay, self.cm[f.index][i]])
 
           # Reset the membrane potential after spikes
@@ -81,8 +80,8 @@ class IzNeuron:
     self.c = -65 + 10 * rn.rand() - 5
     self.d = (8 if isExcitatory else 2) + rn.rand()
 
-    self.u = 0
-    self.v = 0
+    self.v = -65
+    self.u = self.b * self.v
     
     self.index = index
 
