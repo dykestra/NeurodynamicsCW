@@ -1,5 +1,6 @@
 from PlotConnectivity import Scatter as Lattice
 from Connectivity import Connectivity as Conn
+from numpy import arange
 
-Lattice(Conn(0.9), 0.9)
-
+for i in arange(0, 0.6, 0.1):
+  Lattice(Conn(i), i)
