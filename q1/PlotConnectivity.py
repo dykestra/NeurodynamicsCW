@@ -2,7 +2,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def PlotConnectivity(CIJ):
+def Scatter(CIJ, P):
+  """
+  Inputs:
+  CIJ  --  Graph connectivity matrix.
+  """
+  xs = []
+  ys = []
+  N = len(CIJ) - 200
+
+  for i in range(N):
+    for j in range(N):
+      if CIJ[i][j] != 0:
+        xs.append(i)
+        ys.append(j)
+
+
+  plt.plot(xs, ys, "b.")
+  plt.axis([0, N, 0, N])
+  plt.savefig("a/plot for p=%.2f.pdf" % P)
+
+
+def Lattice(CIJ):
   """
   Inputs:
   CIJ  --  Graph connectivity matrix.
