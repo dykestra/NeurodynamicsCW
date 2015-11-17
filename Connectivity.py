@@ -30,7 +30,8 @@ def Connectivity(p):
         # diffuse connections from each I-neurons
         for j in xrange(0, 1000):
             if (i != j):
-                C[i][j] = (rn.rand() - 1) * 2
+                sf = 2 if (j < 800) else 1   # different scaling factors for I-E and I-I
+                C[i][j] = (rn.rand() - 1) * sf         
                 
         # E-I connections
         mod = rn.randint(0, 8, size=None) # pick random E-module
