@@ -2,7 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def PlotConnectivity(CIJ):
+def Scatter(CIJ):
+  """
+  Inputs:
+  CIJ  --  Graph connectivity matrix.
+  """
+
+def Lattice(CIJ):
   """
   Inputs:
   CIJ  --  Graph connectivity matrix.
