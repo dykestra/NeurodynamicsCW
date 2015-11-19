@@ -9,7 +9,7 @@ def Scatter(CIJ, P):
   """
   xs = []
   ys = []
-  N = len(CIJ) - 200
+  N = len(CIJ)
 
   for i in range(N):
     for j in range(N):
@@ -20,7 +20,8 @@ def Scatter(CIJ, P):
 
   plt.plot(xs, ys, "b.")
   plt.axis([0, N, 0, N])
-  plt.savefig("a/plot for p=%.2f.pdf" % P)
+  plt.savefig("a/plot for p=%.2f.png" % P)
+  plt.clf()
 
 
 def Lattice(CIJ):
