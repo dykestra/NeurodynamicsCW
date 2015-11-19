@@ -22,7 +22,14 @@ def Connectivity(p):
         for j in xrange(0, 800):
             if C[i][j] and rn.random() < p:
                 C[i][j] = 0
-                h = int(np.mod(i + rn.randint(1, 799), 800)) # stole this from Ex_3
+                module = int(np.floor(i / 100.0))
+                newModule = np.mod(module + rn.randint(1, 8), 8) # stole this from Ex_3
+                h = rn.randint(0, 100) + (newModule * 100)
+                
+                while C[i][h] != 0:
+                    newModule = np.mod(module + rn.randint(1, 8), 8) # stole this from Ex_3
+                    h = rn.randint(0, 100) + (newModule * 100)
+                
                 C[i][h] = 17
                 
     # connecting I-module
@@ -31,10 +38,10 @@ def Connectivity(p):
         for j in xrange(0, 1000):
             if (i != j):
                 sf = 2 if (j < 800) else 1   # different scaling factors for I-E and I-I
-                C[i][j] = (rn.rand() - 1) * sf         
+                C[i][j] = (rn.rand() - 1) * sf
                 
         # E-I connections
-        mod = rn.randint(0, 8, size=None) # pick random E-module
+        mod = rn.randint(0, 8) # pick random E-module
         neurons = rn.randint(0, 100, size=4) # pick 4 random neurons
         for n in neurons:
             C[mod*100 + n][i] = rn.rand() * 50

@@ -1,5 +1,7 @@
 from PlotConnectivity import Scatter as Lattice
 from Connectivity import Connectivity as Conn
 
-Lattice(Conn(0.9), 0.9)
+for i in xrange(6):
+  p = i / 10.0
+  Lattice(Conn(p), p)
 

@@ -62,7 +62,7 @@ class IzNetwork:
           
           for i in xrange(1000):
             if self.cm[f.index][i] != 0:
-              delay = rn.randint(1, 20) if ((f.index < 800) and (i < 800)) else 1
+              delay = rn.randint(1, 21) if ((f.index < 800) and (i < 800)) else 1
               self.neurons[i].incomingFirings.append([delay, self.cm[f.index][i]])
 
           # Reset the membrane potential after spikes
@@ -87,7 +87,7 @@ class IzNeuron:
 
     self.incomingFirings = []
 
-for i in range(6):
+for i in xrange(1):
   # Rewiring probability
   p = i / 10.0
   
@@ -104,7 +104,7 @@ for i in range(6):
   ys = []
   N = len(firings) - 200
   
-  for t in range(1000):
+  for t in range(runtime):
     for idx in firings[t]:
       xs.append(t)
       ys.append(idx)
@@ -113,5 +113,5 @@ for i in range(6):
   plt.axis([0, 1000, 0, N])
   fig = plt.gcf()
   fig.set_size_inches(8, 3)
-  fig.savefig("Firing plot for p={}%".format(int(p * 100)))
+  fig.savefig("Firing plot for p={}.png".format(p))
   plt.clf()
