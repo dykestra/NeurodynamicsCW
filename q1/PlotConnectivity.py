@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def Scatter(CIJ, P):
+def Scatter(CIJ, p):
   """
   Inputs:
   CIJ  --  Graph connectivity matrix.
@@ -20,7 +20,7 @@ def Scatter(CIJ, P):
 
   plt.plot(xs, ys, "b.")
   plt.axis([0, N, 0, N])
-  plt.savefig("a/plot for p=%.2f.png" % P)
+  plt.savefig("a/Connectivity plot for p={}.png".format(p))
   plt.clf()
 
 
