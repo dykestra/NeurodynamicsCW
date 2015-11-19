@@ -87,7 +87,7 @@ class IzNeuron:
 
     self.incomingFirings = []
 
-for i in xrange(1):
+for i in xrange(6):
   # Rewiring probability
   p = i / 10.0
   
@@ -99,15 +99,19 @@ for i in xrange(1):
   IN.run()
   
   firings = IN.firings
+  firingRates = [np.zeros(8) for count in xrange(runtime)]
   
   xs = []
   ys = []
   N = len(firings) - 200
   
-  for t in range(runtime):
+  for t in xrange(runtime):
     for idx in firings[t]:
       xs.append(t)
       ys.append(idx)
+      module = int(np.floor(idx / 100.0))
+      if module < 8:
+        firingRates[t][module] += 1
   
   plt.plot(xs, ys, "b.")
   plt.axis([0, 1000, 0, N])
@@ -115,3 +119,25 @@ for i in xrange(1):
   fig.set_size_inches(8, 3)
   fig.savefig("Firing plot for p={}.png".format(p))
   plt.clf()
+  
+  lines = [[[],[]] for count in xrange(8)]
+  colours = ['b-','r-','g-','c-','y-','k-','m-','b-']
+  
+  for tblock in xrange(50, runtime, 20):
+    means = np.zeros(8)
+    for t in xrange(50):
+      means += firingRates[tblock - t]
+    means /= 50
+    for module in xrange(8):
+      lines[module][0].append(tblock)
+      lines[module][1].append(means[module])
+      
+  for i in xrange(8):  
+    plt.plot(lines[i][0], lines[i][1], colours[i])
+
+  plt.axis([0,1000,0,10])
+  fig = plt.gcf()
+  fig.set_size_inches(8, 3)
+  fig.savefig("Average module firing plot for p={}.png".format(p))
+  plt.clf()
+  
