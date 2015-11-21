@@ -4,7 +4,6 @@ Setting up connectivity of network
 
 import numpy as np
 import numpy.random as rn
-import matplotlib.pyplot as plt
 
 def Connectivity(p):
 

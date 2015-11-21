@@ -1,2 +1,20 @@
 # NeurodynamicsCW
-Computational Neurodynamics Exercise 4
+
+## Question 1:
+All files in the directory q1 are associated with this question. 
+
+* Connectivity.py: Depends on Numpy. This file contain one function that given a rewiring probablity p will generate a connection matrix as per the specification.
+
+* IzNetwork.py: Depends on Numpy, Threading and Connectivity. This file declared two classed one which holds the parameters for the individual neuron it represents along with the incoming firings and another class to simulate the network of neurons as described in the specification.
+
+* Plot.py: Depends on Matplotlib and Numpy. This file contains 3 methods to analyse and plot data for sections a, b and c as described in the specification.
+
+* Q1.py: Depends on Numpy, IzNetwork and Plot. This file is just a script to create and run the network and then analyse and plot the results of the experiment outlined in the specification.
+
+The plots for section a, b and c can be found in the respective folders. Note by running the following code the plots in these folders will be replaced: 
+
+```
+python Q1.py
+``` 
+
+## Question 2:
