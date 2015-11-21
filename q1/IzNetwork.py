@@ -26,7 +26,7 @@ class IzNetwork:
     return
     
   def updateNeurons(self, t):
-    dt = 0.2
+    dt = 1
     
     # Update current
     for neuron in self.neurons:
