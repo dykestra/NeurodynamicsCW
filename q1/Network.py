@@ -20,13 +20,13 @@ class IzNetwork:
   def run(self):
     for t in range(1, self.runtime):
       for neuron in self.neurons:
-        neuron.I = 15 if rn.poisson(0.01, 1)[0] > 0 else 0
+        neuron.I = 15 if (rn.poisson(0.01, 1)[0] > 0) else 0
       self.updateNeurons(t)
         
     return
     
   def updateNeurons(self, t):
-    dt = 0.2
+    dt = 1
     
     # Update current
     for neuron in self.neurons:
@@ -49,7 +49,7 @@ class IzNetwork:
         u = neuron.u
 
         neuron.v += dt*(0.04*v*v + 5*v + 140 - u + neuron.I)
-        neuron.u += dt*(neuron.a*(neuron.b*v - u))
+        neuron.u += dt*(neuron.a * (neuron.b * v - u))
 
       # Find index of neurons that have fired this millisecond
       fired = []
