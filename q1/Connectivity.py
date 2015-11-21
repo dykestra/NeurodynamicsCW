@@ -4,6 +4,7 @@ Setting up connectivity of network
 
 import numpy as np
 import numpy.random as rn
+import matplotlib.pyplot as plt
 
 def Connectivity(p):
 
@@ -51,3 +52,4 @@ def Connectivity(p):
             C[mod*100 + n][i] = rn.rand() * 50
             
     return C
+

@@ -1,125 +1,89 @@
+from Connectivity import Connectivity as Conn
 import numpy as np
-
+import numpy.random as rn
+import matplotlib.pyplot as plt
+import threading
 
 class IzNetwork:
-  """
-  Network of Izhikevich neurons.
-  """
 
-  def __init__(self, _neuronsPerLayer, _Dmax):
-    """
-    Initialise network with given number of neurons
+  def __init__(self, _p, _runtime):
+    self.p = _p
+    self.cm = Conn(self.p)
+    
+    self.runtime = _runtime
+    
+    self.neurons = [IzNeuron(True, count) for count in range(800)]
+    self.neurons = self.neurons + [IzNeuron(False, count) for count in range(800, 1000)]
+    
+    self.firings = [[] for count in range(self.runtime)]
 
-    Inputs:
-    _neuronsPerLayer -- List with the number of neurons in each layer. A list
-                        [N1, N2, ... Nk] will return a network with k layers
-                        with the corresponding number of neurons in each.
-
-    _Dmax            -- Maximum delay in all the synapses in the network. Any
-                        longer delay will result in failing to deliver spikes.
-    """
-
-    self.Dmax = _Dmax
-    self.Nlayers = len(_neuronsPerLayer)
-
-    self.layer = {}
-
-    for i, n in enumerate(_neuronsPerLayer):
-      self.layer[i] = IzLayer(n)
-
-  def Update(self, t):
-    """
-    Run simulation of the whole network for 1 millisecond and update the
-    network's internal variables.
-
-    Inputs:
-    t -- Current timestep. Necessary to sort out the synaptic delays.
-    """
-    for lr in xrange(self.Nlayers):
-      self.NeuronUpdate(lr, t)
-
-  def NeuronUpdate(self, i, t):
-    """
-    Izhikevich neuron update function. Update one layer for 1 millisecond
-    using the Euler method.
-
-    Inputs:
-    i -- Number of layer to update
-    t -- Current timestep. Necessary to sort out the synaptic delays.
-    """
-
-    # Euler method step size in ms
-    dt = 0.2
-
-    # Calculate current from incoming spikes
-    for j in xrange(self.Nlayers):
-
-      # If layer[i].S[j] exists then layer[i].factor[j] and
-      # layer[i].delay[j] have to exist
-      if j in self.layer[i].S:
-        S = self.layer[i].S[j]  # target neuron->rows, source neuron->columns
-
-        # Firings contains time and neuron idx of each spike.
-        # [t, index of the neuron in the layer j]
-        firings = self.layer[j].firings
-
-        # Find incoming spikes taking delays into account
-        delay = self.layer[i].delay[j]
-        F = self.layer[i].factor[j]
-
-        # Sum current from incoming spikes
-        k = len(firings)
-        while k > 0 and (firings[k-1, 0] > (t - self.Dmax)):
-          idx = delay[:, firings[k-1, 1]] == (t-firings[k-1, 0])
-          self.layer[i].I[idx] += F * S[idx, firings[k-1, 1]]
-          k = k-1
-
+  def run(self):
+    for t in range(1, self.runtime):
+      for neuron in self.neurons:
+        neuron.I = 15 if rn.poisson(0.01, 1)[0] > 0 else 0
+      self.updateNeurons(t)
+        
+    return
+    
+  def updateNeurons(self, t):
+    dt = 1
+    
+    # Update current
+    for neuron in self.neurons:
+      i = len(neuron.incomingFirings)
+      while i > 0:
+        i -= 1
+        
+        firing = neuron.incomingFirings[i]
+        
+        if firing[0] == 1:
+          neuron.I += firing[1]
+          del neuron.incomingFirings[i]
+        else:
+          firing[0] -= 1
+      
     # Update v and u using the Izhikevich model and Euler method
-    for k in xrange(int(1/dt)):
-      v = self.layer[i].v
-      u = self.layer[i].u
+    for k in range(int(1/dt)):
+      for neuron in self.neurons:
+        v = neuron.v
+        u = neuron.u
 
-      self.layer[i].v += dt*(0.04*v*v + 5*v + 140 - u + self.layer[i].I)
-      self.layer[i].u += dt*(self.layer[i].a*(self.layer[i].b*v - u))
+        neuron.v += dt*(0.04*v*v + 5*v + 140 - u + neuron.I)
+        neuron.u += dt*(neuron.a*(neuron.b*v - u))
 
       # Find index of neurons that have fired this millisecond
-      fired = np.where(self.layer[i].v >= 30)[0]
+      fired = []
+      for neuron in self.neurons:
+        if neuron.v >= 30:
+          fired.append(neuron)
 
       if len(fired) > 0:
         for f in fired:
-          # Add spikes into spike train
-          if len(self.layer[i].firings) != 0:
-            self.layer[i].firings = np.vstack([self.layer[i].firings, [t, f]])
-          else:
-            self.layer[i].firings = np.array([[t, f]])
+          self.firings[t].append(f.index)
+          
+          for i in range(1000):
+            if self.cm[f.index][i] != 0:
+              delay = rn.randint(1, 21) if ((f.index < 800) and (i < 800)) else 1
+              self.neurons[i].incomingFirings.append([delay, self.cm[f.index][i]])
 
           # Reset the membrane potential after spikes
-          self.layer[i].v[f]  = self.layer[i].c[f]
-          self.layer[i].u[f] += self.layer[i].d[f]
+          f.v  = f.c
+          f.u += f.d
 
     return
 
+class IzNeuron:
 
-class IzLayer:
-  """
-  Layer of Izhikevich neurons to be used inside an IzNetwork.
-  """
+  def __init__(self, isExcitatory, _index):
 
-  def __init__(self, n):
-    """
-    Initialise layer with empty vectors.
+    self.a = 0.02
+    self.b = 0.2 if isExcitatory else 0.25
+    self.c = -65
+    self.d = 8 if isExcitatory else 2
 
-    Inputs:
-    n -- Number of neurons in the layer
-    """
+    self.v = -65
+    self.u = self.b * self.v
+    
+    self.index = _index
 
-    self.N = n
-    self.a = np.zeros(n)
-    self.b = np.zeros(n)
-    self.c = np.zeros(n)
-    self.d = np.zeros(n)
-
-    self.S      = {}
-    self.delay  = {}
-    self.factor = {}
-
+    self.incomingFirings = []
