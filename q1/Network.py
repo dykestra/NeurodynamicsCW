@@ -2,6 +2,7 @@ from Connectivity import Connectivity as Conn
 import numpy as np
 import numpy.random as rn
 import matplotlib.pyplot as plt
+import threading
 
 class IzNetwork:
 
@@ -11,13 +12,13 @@ class IzNetwork:
     
     self.runtime = _runtime
     
-    self.neurons = [IzNeuron(True, count) for count in xrange(800)]
-    self.neurons = self.neurons + [IzNeuron(False, count) for count in xrange(800, 1000)]
+    self.neurons = [IzNeuron(True, count) for count in range(800)]
+    self.neurons = self.neurons + [IzNeuron(False, count) for count in range(800, 1000)]
     
-    self.firings = [[] for count in xrange(self.runtime)]
+    self.firings = [[] for count in range(self.runtime)]
 
   def run(self):
-    for t in xrange(1, self.runtime):
+    for t in range(1, self.runtime):
       for neuron in self.neurons:
         neuron.I = 15 if rn.poisson(0.01, 1)[0] > 0 else 0
       self.updateNeurons(t)
@@ -42,7 +43,7 @@ class IzNetwork:
           firing[0] -= 1
       
     # Update v and u using the Izhikevich model and Euler method
-    for k in xrange(int(1/dt)):
+    for k in range(int(1/dt)):
       for neuron in self.neurons:
         v = neuron.v
         u = neuron.u
@@ -60,7 +61,7 @@ class IzNetwork:
         for f in fired:
           self.firings[t].append(f.index)
           
-          for i in xrange(1000):
+          for i in range(1000):
             if self.cm[f.index][i] != 0:
               delay = rn.randint(1, 21) if ((f.index < 800) and (i < 800)) else 1
               self.neurons[i].incomingFirings.append([delay, self.cm[f.index][i]])
@@ -87,10 +88,9 @@ class IzNeuron:
 
     self.incomingFirings = []
 
-for i in xrange(6):
+for i in range(6):
   # Rewiring probability
   p = i / 10.0
-  
   # Time in ms to simulate
   runtime = 1000
   
@@ -99,13 +99,13 @@ for i in xrange(6):
   IN.run()
   
   firings = IN.firings
-  firingRates = [np.zeros(8) for count in xrange(runtime)]
+  firingRates = [np.zeros(8) for count in range(runtime)]
   
   xs = []
   ys = []
   N = len(firings) - 200
   
-  for t in xrange(runtime):
+  for t in range(runtime):
     for idx in firings[t]:
       xs.append(t)
       ys.append(idx)
@@ -120,24 +120,29 @@ for i in xrange(6):
   fig.savefig("Firing plot for p={}.png".format(p))
   plt.clf()
   
-  lines = [[[],[]] for count in xrange(8)]
+  print("Firing graph for p = {} completed".format(p))
+  
+  lines = [[[],[]] for count in range(8)]
   colours = ['b-','r-','g-','c-','y-','k-','m-','b-']
   
-  for tblock in xrange(50, runtime, 20):
+  for tblock in range(50, runtime, 20):
     means = np.zeros(8)
-    for t in xrange(50):
+    for t in range(50):
       means += firingRates[tblock - t]
     means /= 50
-    for module in xrange(8):
+    for module in range(8):
       lines[module][0].append(tblock)
       lines[module][1].append(means[module])
       
-  for i in xrange(8):  
+  for i in range(8):  
     plt.plot(lines[i][0], lines[i][1], colours[i])
-
+  
   plt.axis([0,1000,0,10])
   fig = plt.gcf()
   fig.set_size_inches(8, 3)
   fig.savefig("Average module firing plot for p={}.png".format(p))
   plt.clf()
   
+  print("Means firing graph for p = {} completed".format(p))
+  
+print("Finished")
