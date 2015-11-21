@@ -117,7 +117,7 @@ for i in xrange(6):
   plt.axis([0, 1000, 0, N])
   fig = plt.gcf()
   fig.set_size_inches(8, 3)
-  fig.savefig("Firing plot for p={}.png".format(p))
+  fig.savefig("b/Firing plot for p={}.png".format(p))
   plt.clf()
   
   lines = [[[],[]] for count in xrange(8)]
@@ -138,6 +138,6 @@ for i in xrange(6):
   plt.axis([0,1000,0,10])
   fig = plt.gcf()
   fig.set_size_inches(8, 3)
-  fig.savefig("Average module firing plot for p={}.png".format(p))
+  fig.savefig("c/Average module firing plot for p={}.png".format(p))
   plt.clf()
   

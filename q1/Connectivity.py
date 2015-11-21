@@ -13,7 +13,7 @@ def Connectivity(p):
     for i in xrange(0, 800, 100):
         r = rn.randint(0, 100, size=(1000,2)) # 1000 random pairs
         for pair in r:
-            while pair[0] == pair[1]:
+            while pair[0] == pair[1] or C[i + pair[0]][i + pair[1]] != 0:
                 pair[1] = rn.randint(0, 100)
             C[i + pair[0]][i + pair[1]] = 17
             
@@ -47,3 +47,4 @@ def Connectivity(p):
             C[mod*100 + n][i] = rn.rand() * 50
             
     return C
+
