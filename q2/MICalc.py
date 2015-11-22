@@ -1,21 +1,27 @@
 from jpype import *
 import os
 
-
+# Data list of 8 lists for each module. Each module is a list of points [[time, rate], ..... [t, r]]
 def MICalc(data):
     path = os.getcwd() + "/infodynamics.jar"
 
     startJVM(getDefaultJVMPath(), "-Djava.class.path=" + path)
     classKraskov2 = JPackage("infodynamics.measures.continuous.kraskov").MultiInfoCalculatorKraskov2
     kraskov = classKraskov2()
-    # Not sure if we need to set any properties (normalisation etc)
-    # Not sure if we only have 2 joint variables
+
     kraskov.initialise(2)
-    kraskov.setObservations(JArray(JDouble, 2)(data))
+    
+    # Add each module of observations
+    kraskov.startAddObservations()
+    for module in data:
+        # module[i] = [time, firingRate] 
+        javaArray = JArray(JDouble, 2)(module)
+        kraskov.addObservations(javaArray)
+    kraskov.finaliseAddObservations()
+    
+    # Calculate the multi-infrmation for the 8 sets
     information = kraskov.computeAverageLocalOfObservations()
     shutdownJVM()
 
+    # Should be a 2D iterable
     return information
-
-    # http://lizier.me/joseph/software/jidt/javadocs/v1.3/infodynamics/measures/continuous/MultiInfoCalculator.html#computeAverageLocalOfObservations()
-    # http://lizier.me/joseph/software/jidt/javadocs/v1.3/infodynamics/measures/continuous/kraskov/MultiInfoCalculatorKraskov2.html
