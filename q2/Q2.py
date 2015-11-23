@@ -9,7 +9,7 @@ from Plot import *
 path = os.getcwd() + "/infodynamics.jar"
 startJVM(getDefaultJVMPath(), "-Djava.class.path=" + path)
 
-N  = 2
+N  = 20
 xs = []
 ys = []
 
