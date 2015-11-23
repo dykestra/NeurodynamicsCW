@@ -1,11 +1,8 @@
 from jpype import *
-import os
+import numpy as np
 
 # Data list of 8 lists for each module. Each module is a list of points [[time, rate], ..... [t, r]]
 def MICalc(data):
-    path = os.getcwd() + "/infodynamics.jar"
-
-    startJVM(getDefaultJVMPath(), "-Djava.class.path=" + path)
     classKraskov2 = JPackage("infodynamics.measures.continuous.kraskov").MultiInfoCalculatorKraskov2
     kraskov = classKraskov2()
 
@@ -21,7 +18,6 @@ def MICalc(data):
     
     # Calculate the multi-infrmation for the 8 sets
     information = kraskov.computeAverageLocalOfObservations()
-    shutdownJVM()
 
     # Conversion to bits
     return (information * np.log2(np.e))
