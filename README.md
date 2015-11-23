@@ -22,4 +22,8 @@ All files in the directory q2 are associated with this question.
 
 * MICalc.py: Depends on Jpype and OS. This file contains one function that calculates the multi-information of the set of mean firing rates for the set of modules. Note this section spins up a JVM and uses the infodynamics JAR to run the analysis.
 
+* Plot.py: Depends on Numpy, Matplotlib.pyplot and MICalc. This file contains a function for analysing the firings data of 1 run of a network resulting in the output of the multi-information of the 8 modules' firing data and another function to plot the results of many such runs.
+
+* Q2.py: Depends on Numpy, q1/IzNetwork (and thus sys) and Plot. This file is a script that performs analysis of 20 randomly rewired networks and generates the plot of p vs information in bits.
+
 * infodynamics.jar: Java Information Dynamics Toolkit.

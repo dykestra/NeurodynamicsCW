@@ -23,5 +23,5 @@ def MICalc(data):
     information = kraskov.computeAverageLocalOfObservations()
     shutdownJVM()
 
-    # Should be a 2D iterable
-    return information
+    # Conversion to bits
+    return (information * np.log2(np.e))
