@@ -2,6 +2,7 @@ from IzNetwork import IzNetwork
 from Plot import *
 import numpy as np
 import threading
+import time
 
 class Q1Thread (threading.Thread):
   def __init__(self, threadID, p):
@@ -15,9 +16,11 @@ class Q1Thread (threading.Thread):
     
     IN = IzNetwork(self.p, runtime)
     
+    t = time.time()
     IN.run()
+    workTime = int(np.round(time.time() - t))
     
-    print("Thread {} simulation completed".format(self.threadID))
+    print("Thread {} simulation completed in {} seconds".format(self.threadID, workTime))
     
     firings = IN.firings
     firingRates = [np.zeros(8) for count in range(runtime)]

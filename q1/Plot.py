@@ -51,6 +51,7 @@ def genB(runtime, firings, firingRates, p):
 def genC(runtime, firingRates, p):
   lines = [[[],[]] for count in range(8)]
   colours = ['b-','r-','g-','c-','y-','k-','m-','b-']
+  maxY = 0
   
   for tblock in range(50, runtime, 20):
     means = np.zeros(8)
@@ -59,12 +60,14 @@ def genC(runtime, firingRates, p):
     means /= 50
     for module in range(8):
       lines[module][0].append(tblock)
-      lines[module][1].append(means[module])  
+      lines[module][1].append(means[module])
+      if (means[module] > maxY):
+        maxY = means[module]
 
   for i in range(8):  
     plt.plot(lines[i][0], lines[i][1], colours[i])
   
-  plt.axis([0,1000,0,10])
+  plt.axis([0,1000,0,int(maxY) + 1])
   fig = plt.gcf()
   fig.set_size_inches(8, 3)
   fig.savefig("c/Average module firing plot for p={}.png".format(p))

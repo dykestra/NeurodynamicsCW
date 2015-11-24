@@ -75,10 +75,11 @@ class IzNeuron:
 
   def __init__(self, isExcitatory, _index):
 
+    r = rn.rand()
     self.a = 0.02
     self.b = 0.2 if isExcitatory else 0.25
-    self.c = -65
-    self.d = 8 if isExcitatory else 2
+    self.c = -65 + (r**2)
+    self.d = (8 - 6 * (r**2)) if isExcitatory else 2
 
     self.v = -65
     self.u = self.b * self.v
