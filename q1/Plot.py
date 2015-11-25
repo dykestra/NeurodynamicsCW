@@ -16,7 +16,9 @@ def genA(conMatrix, p):
 
   plt.plot(xs, ys, "b.")
   plt.axis([0, N, 0, N])
-  plt.savefig("a/Connectivity plot for p={}.png".format(p))
+  fig = plt.gcf()
+  fig.set_size_inches(8, 8)
+  fig.savefig("a/Connectivity plot for p={}.png".format(p))
   plt.clf()
   print("Connectivity plot for p={} completed".format(p))
 
