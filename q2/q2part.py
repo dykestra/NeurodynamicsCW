@@ -9,7 +9,7 @@ from Plot import *
 path = os.getcwd() + "/infodynamics.jar"
 startJVM(getDefaultJVMPath(), "-Djava.class.path=" + path)
 
-p =  rn.random()
+p = rn.random()
 runtime = 60000
 
 IN = IzNetwork(p, runtime)

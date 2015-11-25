@@ -6,14 +6,14 @@ def MICalc(data):
     classKraskov2 = JPackage("infodynamics.measures.continuous.kraskov").MultiInfoCalculatorKraskov2
     kraskov = classKraskov2()
 
-    kraskov.initialise(2)
+    kraskov.initialise(8)
     
     # Add each module of observations
     kraskov.startAddObservations()
-    for module in data:
-        # module[i] = [time, firingRate]
-        javaArray = JArray(JDouble, 2)(module)
-        kraskov.addObservations(javaArray)
+    
+    javaArray = JArray(JDouble, 2)(data)
+    kraskov.addObservations(javaArray)
+        
     kraskov.finaliseAddObservations()
     
     # Calculate the multi-infrmation for the 8 sets

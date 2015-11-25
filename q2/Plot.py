@@ -4,7 +4,7 @@ from MICalc import MICalc
 
 def genPlot(xs, ys):
   plt.plot(xs, ys, "b.")
-  plt.axis([0, (int)(max(xs) + 1), 0, (int)(max(ys) + 1)])
+  plt.axis([0, 1, 0, 5])
   plt.savefig("Multi-Information plot.png")
   plt.clf()
   print("Multi-Information plot generated")
@@ -22,15 +22,15 @@ def analyseFirings(firings):
       if module < 8:
         firingRates[t][module] += 1
   
+  firings2 = []
+  
   # Calculate mean firing rates
   for tblock in range(50, runtime, 20):
     means = np.zeros(8)
     for t in range(50):
       means += firingRates[tblock - t]
-    means /= 50
-    for module in range(8):
-      # Discard first seconds worth of data
-      if tblock > 1000:
-        modules[module].append([tblock + 0.0, means[module]])
+    means /= 50.0
+    if tblock > 1000:
+        firings2.append(means)
 
-  return MICalc(modules)
+  return MICalc(firings2)
