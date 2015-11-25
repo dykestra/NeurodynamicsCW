@@ -4,6 +4,8 @@ from MICalc import MICalc
 
 def genPlot(xs, ys):
   plt.plot(xs, ys, "b.")
+  plt.xlabel('Rewiring probability p')
+  plt.ylabel('Integration (bits)')
   plt.axis([0, 1, 0, 5])
   plt.savefig("Multi-Information plot.png")
   plt.clf()
