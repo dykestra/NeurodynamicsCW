@@ -8,6 +8,6 @@ error = out/res.$(Process).err
 
 log = out/res.log
 
-queue 20
+queue 200
 
 

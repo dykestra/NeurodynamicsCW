@@ -2,7 +2,3 @@
 *.pyc
 *.png
 *.py~
-q2/jpype
-q2/jpypex
-q2/out
-q2/_jpype.so
