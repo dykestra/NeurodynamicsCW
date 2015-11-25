@@ -9,21 +9,12 @@ from Plot import *
 path = os.getcwd() + "/infodynamics.jar"
 startJVM(getDefaultJVMPath(), "-Djava.class.path=" + path)
 
-N  = 20
-xs = []
-ys = []
+p =  rn.random()
+runtime = 60000
 
-for i in range(N):
-  print "Creating network {}".format(i)
+IN = IzNetwork(p, runtime)
+IN.run()
 
-  p =  rn.random()
-  runtime = 1400
-  
-  IN = IzNetwork(p, runtime)
-  IN.run()
-
-  xs.append(p)
-  ys.append(analyseFirings(IN.firings))
+print("{},{}".format(p, analyseFirings(IN.firings)))
 
 shutdownJVM()
-genPlot(xs, ys)

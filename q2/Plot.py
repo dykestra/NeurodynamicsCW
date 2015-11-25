@@ -31,6 +31,6 @@ def analyseFirings(firings):
     for module in range(8):
       # Discard first seconds worth of data
       if tblock > 1000:
-        modules[module].append([tblock, means[module]])  
+        modules[module].append([tblock + 0.0, means[module]])
 
   return MICalc(modules)

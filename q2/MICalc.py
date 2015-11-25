@@ -11,7 +11,7 @@ def MICalc(data):
     # Add each module of observations
     kraskov.startAddObservations()
     for module in data:
-        # module[i] = [time, firingRate] 
+        # module[i] = [time, firingRate]
         javaArray = JArray(JDouble, 2)(module)
         kraskov.addObservations(javaArray)
     kraskov.finaliseAddObservations()
